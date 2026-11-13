@@ -1598,7 +1598,7 @@ func openPrivateCodexHistory(path string) (*os.File, error) {
 			return nil, err
 		}
 		stat, ok := info.Sys().(*syscall.Stat_t)
-		if !ok || !info.IsDir() || info.Mode()&os.ModeSymlink != 0 || info.Mode().Perm()&0o022 != 0 || int(stat.Uid) != owner {
+		if !ok || !info.IsDir() || info.Mode()&os.ModeSymlink != 0 || info.Mode().Perm()&0o022 != 0 || (int(stat.Uid) != owner && int(stat.Uid) != 0) {
 			return nil, errors.New("Codex history parent is not private and owner-controlled")
 		}
 	}

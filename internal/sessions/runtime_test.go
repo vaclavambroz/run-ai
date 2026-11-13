@@ -151,13 +151,6 @@ func TestTmuxE2EPreservesDirectInteractiveCodexProcessAcrossAttachDetach(t *test
 	}); err != nil {
 		t.Fatalf("create direct Codex TUI session: %v", err)
 	}
-	info, err := client.Validate(context.Background(), name, Expectation{Manifest: manifest, UID: os.Getuid()})
-	if err != nil {
-		t.Fatalf("validate direct Codex TUI session: %v", err)
-	}
-	if info.Current != "node" {
-		t.Fatalf("pane current command = %q, want Codex-compatible node process", info.Current)
-	}
 	deadline := time.Now().Add(2 * time.Second)
 	for {
 		output, captureErr := exec.Command(tmux, "capture-pane", "-p", "-t", "="+name+":0.0").CombinedOutput()
@@ -168,6 +161,13 @@ func TestTmuxE2EPreservesDirectInteractiveCodexProcessAcrossAttachDetach(t *test
 			t.Fatalf("direct Codex TUI stub did not become ready: %v: %s", captureErr, output)
 		}
 		time.Sleep(20 * time.Millisecond)
+	}
+	info, err := client.Validate(context.Background(), name, Expectation{Manifest: manifest, UID: os.Getuid()})
+	if err != nil {
+		t.Fatalf("validate direct Codex TUI session: %v", err)
+	}
+	if info.Current != "node" {
+		t.Fatalf("pane current command = %q, want Codex-compatible node process", info.Current)
 	}
 
 	// Attach through a real PTY client, then detach it from a second tmux

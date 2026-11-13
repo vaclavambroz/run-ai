@@ -325,11 +325,11 @@ func TestFreshCodexCaptureWarnsWhenHistoryIsUnavailable(t *testing.T) {
 }
 
 func TestOpenPrivateCodexHistoryRejectsLinksAndWritableParents(t *testing.T) {
-	root, err := filepath.Abs(".")
+	home, err := os.UserHomeDir()
 	if err != nil {
 		t.Fatal(err)
 	}
-	root, err = os.MkdirTemp(root, ".history-")
+	root, err := os.MkdirTemp(home, ".history-")
 	if err != nil {
 		t.Fatal(err)
 	}
