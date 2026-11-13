@@ -1,0 +1,26 @@
+#!/bin/sh
+set -eu
+
+# Validate every parent that dpkg will write below before unpacking. This keeps
+# an existing local symlink from redirecting package-owned files elsewhere.
+for directory in /etc/run-ai /usr/lib/run-ai /usr/share/run-ai /usr/share/run-ai/profiles.d /usr/share/run-ai/schemas; do
+  if [ -e "$directory" ] || [ -L "$directory" ]; then
+    if [ -L "$directory" ] || [ ! -d "$directory" ] || [ "$(stat -c '%u:%g' "$directory")" != "0:0" ] || \
+       find "$directory" -maxdepth 0 -perm /022 -print -quit | grep -q .; then
+      echo "run-ai: refusing unsafe package directory at $directory" >&2
+      exit 1
+    fi
+  fi
+done
+
+for file in /usr/bin/run_ai /etc/run-ai/config.json /usr/share/run-ai/profiles.d/wsl.json /usr/share/run-ai/schemas/run-ai-platform-profile-v1.schema.json /usr/lib/run-ai/detect-wsl; do
+  if [ -e "$file" ] || [ -L "$file" ]; then
+    if [ -L "$file" ] || [ ! -f "$file" ] || [ "$(stat -c '%u:%g' "$file")" != "0:0" ] || \
+       find "$file" -maxdepth 0 -perm /022 -print -quit | grep -q .; then
+      echo "run-ai: refusing unsafe package file at $file" >&2
+      exit 1
+    fi
+  fi
+done
+
+exit 0

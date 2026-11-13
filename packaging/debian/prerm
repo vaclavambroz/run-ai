@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+
+# No service is owned by this package. In particular, never stop tmux sessions
+# or alter provider session maps during upgrade/removal.
+exit 0

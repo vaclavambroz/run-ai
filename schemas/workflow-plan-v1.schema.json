@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/vaclavambroz/run-ai/schemas/workflow-plan-v1.schema.json",
+  "title": "run_ai_workflow_plan/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "kind", "access_mode", "requires_new_session", "execution_mode",
+    "mutation_allowed", "permission_policy_digest", "warning_code", "warning",
+    "prompt", "plan_digest"
+  ],
+  "properties": {
+    "schema": {"const": "run_ai_workflow_plan/v1"},
+    "kind": {"enum": ["none", "monitoring", "spam", "dev"]},
+    "access_mode": {"enum": ["full", "confirm", "readonly"]},
+    "target": {"type": "string", "minLength": 1, "maxLength": 253},
+    "spam_references": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 10,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["message_id", "source_kind", "canonical_url"],
+        "properties": {
+          "message_id": {"type": "integer", "minimum": 1},
+          "status": {"enum": ["active"]},
+          "source_kind": {"enum": ["view", "raw", "source"]},
+          "canonical_url": {"type": "string", "maxLength": 2048}
+        }
+      }
+    },
+    "requires_new_session": {"type": "boolean"},
+    "execution_mode": {"enum": ["interactive", "analyze_only", "direct", "confirmed", "two_phase_apply", "two_phase_confirm"]},
+    "mutation_allowed": {"type": "boolean"},
+    "permission_policy_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "warning_code": {"enum": ["full_access_unsafe", "confirmation_required", "hard_readonly_enforced"]},
+    "warning": {"type": "string", "minLength": 1, "maxLength": 512},
+    "prompt": {"type": "string", "minLength": 1, "maxLength": 4096},
+    "plan_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"access_mode": {"const": "readonly"}}, "required": ["access_mode"]},
+      "then": {"properties": {"mutation_allowed": {"const": false}, "execution_mode": {"const": "analyze_only"}}}
+    },
+    {
+      "if": {"properties": {"kind": {"const": "monitoring"}}, "required": ["kind"]},
+      "then": {
+        "properties": {
+          "access_mode": {"enum": ["full", "confirm"]},
+          "target": {"const": "monitoring"},
+          "requires_new_session": {"const": false},
+          "mutation_allowed": {"const": true}
+        },
+        "required": ["target"]
+      }
+    },
+    {
+      "if": {"properties": {"kind": {"const": "spam"}}, "required": ["kind"]},
+      "then": {
+        "properties": {
+          "target": {"type": "string", "minLength": 1, "maxLength": 253},
+          "requires_new_session": {"const": true}
+        },
+        "required": ["target", "spam_references"]
+      }
+    }
+  ]
+}

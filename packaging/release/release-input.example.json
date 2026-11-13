@@ -1,0 +1,25 @@
+{
+  "schema": "run-ai-release-input/v1",
+  "version": "1.0.0",
+  "channel": "candidate",
+  "source_commit": "0000000000000000000000000000000000000000",
+  "source_date_epoch": 1791979200,
+  "key_id": "run-ai-release-2026",
+  "build": {
+    "git_tag": "v1.0.0",
+    "go_toolchain": "go version go1.24.4 linux/amd64",
+    "host_os": "linux",
+    "host_arch": "amd64"
+  },
+  "artifacts": [
+    {
+      "file": "dist/run-ai_1.0.0_linux_amd64.tar.gz",
+      "path": "run-ai_1.0.0_linux_amd64.tar.gz",
+      "kind": "archive",
+      "os": "linux",
+      "arch": "amd64",
+      "sbom_file": "dist/run-ai_1.0.0_linux_amd64.archive.spdx.json",
+      "sbom_path": "run-ai_1.0.0_linux_amd64.archive.spdx.json"
+    }
+  ]
+}

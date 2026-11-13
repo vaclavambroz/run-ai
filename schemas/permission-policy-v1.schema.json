@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/vaclavambroz/run-ai/schemas/permission-policy-v1.schema.json",
+  "title": "run_ai_permission_policy/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "mode", "provider_permission_intent", "hard_readonly",
+    "allow_filesystem_writes", "allow_external_mutations", "allow_direct_network",
+    "allow_direct_ssh", "allow_generic_shell", "allow_fixed_read_broker",
+    "allow_approval_escalation", "require_per_action_confirmation",
+    "allow_credential_exposure", "warning_code", "policy_digest"
+  ],
+  "properties": {
+    "schema": {"const": "run_ai_permission_policy/v1"},
+    "mode": {"enum": ["full", "confirm", "readonly"]},
+    "provider_permission_intent": {"enum": ["full_compatibility", "confirm_mutations", "deny_mutations"]},
+    "hard_readonly": {"type": "boolean"},
+    "allow_filesystem_writes": {"type": "boolean"},
+    "allow_external_mutations": {"type": "boolean"},
+    "allow_direct_network": {"type": "boolean"},
+    "allow_direct_ssh": {"type": "boolean"},
+    "allow_generic_shell": {"type": "boolean"},
+    "allow_fixed_read_broker": {"type": "boolean"},
+    "allow_approval_escalation": {"type": "boolean"},
+    "require_per_action_confirmation": {"type": "boolean"},
+    "allow_credential_exposure": {"const": false},
+    "warning_code": {"enum": ["full_access_unsafe", "confirmation_required", "hard_readonly_enforced"]},
+    "policy_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

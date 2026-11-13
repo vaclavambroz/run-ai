@@ -1,0 +1,36 @@
+class RunAi < Formula
+  desc "Provider-neutral terminal AI session runner"
+  homepage "https://github.com/vaclavambroz/run-ai"
+  version "@VERSION@"
+  license "MIT"
+  depends_on "tmux"
+  depends_on "rsync"
+  depends_on :macos
+
+  on_macos do
+    if Hardware::CPU.arm?
+      url "https://github.com/vaclavambroz/run-ai/releases/download/v@VERSION@/run-ai_@VERSION@_darwin_arm64.tar.gz"
+      sha256 "@DARWIN_ARM64_SHA256@"
+    else
+      url "https://github.com/vaclavambroz/run-ai/releases/download/v@VERSION@/run-ai_@VERSION@_darwin_amd64.tar.gz"
+      sha256 "@DARWIN_AMD64_SHA256@"
+    end
+  end
+
+  def install
+    bin.install "run_ai"
+    doc.install "LICENSE"
+  end
+
+  def caveats
+    <<~EOS
+      run-ai is a user-scoped CLI. It does not install or start a daemon.
+      Configuration: ~/Library/Application Support/run-ai/config.json
+      State and audit data: ~/Library/Application Support/run-ai/state/
+    EOS
+  end
+
+  test do
+    assert_match "run_ai", shell_output("#{bin}/run_ai --help")
+  end
+end

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/vaclavambroz/run-ai/schemas/audit-receipt-v1.schema.json",
+  "title": "run_ai_audit_receipt/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "event", "outcome", "fault_code", "occurred_at", "run_id",
+    "provider", "model", "session_id", "access_mode", "workflow_kind",
+    "workflow_plan_digest", "permission_policy_digest", "capability_profile_digest",
+    "execution_mode", "mutation_allowed", "warning_code", "warning_presented",
+    "receipt_digest"
+  ],
+  "properties": {
+    "schema": {"const": "run_ai_audit_receipt/v1"},
+    "event": {"enum": ["launch_started", "launch_finished"]},
+    "outcome": {"enum": ["started", "succeeded", "failed", "denied"]},
+    "fault_code": {"enum": ["none", "policy_denied", "prerequisite_missing", "authentication_failed", "session_collision", "provider_runtime_failed"]},
+    "occurred_at": {"type": "string", "format": "date-time"},
+    "run_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "provider": {"enum": ["codex", "claude", "gemini", "antigravity"]},
+    "model": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "session_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "access_mode": {"enum": ["full", "confirm", "readonly"]},
+    "workflow_kind": {"enum": ["none", "monitoring", "spam", "dev"]},
+    "workflow_plan_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "permission_policy_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "capability_profile_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "execution_mode": {"enum": ["interactive", "analyze_only", "direct", "confirmed", "two_phase_apply", "two_phase_confirm"]},
+    "mutation_allowed": {"type": "boolean"},
+    "target_ref": {"type": "string", "minLength": 1, "maxLength": 253},
+    "spam_message_ids": {"type": "array", "minItems": 1, "maxItems": 10, "uniqueItems": true, "items": {"type": "integer", "minimum": 1}},
+    "warning_code": {"enum": ["full_access_unsafe", "confirmation_required", "hard_readonly_enforced"]},
+    "warning_presented": {"const": true},
+    "approval_artifact_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "previous_receipt_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "exit_code": {"type": "integer", "minimum": 0, "maximum": 255},
+    "receipt_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

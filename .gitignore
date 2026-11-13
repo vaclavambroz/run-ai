@@ -1,0 +1,10 @@
+/build/
+/dist/
+/run_ai
+*.test
+*.out
+*.tmp
+.DS_Store
+__pycache__/
+*.pyc
+*.pyo

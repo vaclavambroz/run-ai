@@ -1,0 +1,12 @@
+Package: run-ai
+Version: @VERSION@
+Section: admin
+Priority: optional
+Architecture: @DEB_ARCH@
+Maintainer: Hosting od Váška AI Platform <ai@hostingodvaska.cz>
+Depends: ca-certificates, curl, tmux, openssh-client, rsync, bubblewrap
+Homepage: https://ai.hostingodvaska.cz/
+Description: provider-neutral terminal AI session runner
+ run-ai selects and resumes supported AI terminal sessions through one
+ provider-neutral command. This package contains only the user-facing CLI;
+ privileged brokers and system services are intentionally separate.

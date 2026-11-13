@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+
+# dpkg owns the conffile lifecycle. Per-user XDG state is intentionally kept,
+# including on purge, so an uninstall cannot destroy session/audit history.
+exit 0

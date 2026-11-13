@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/vaclavambroz/run-ai/schemas/hosting-profile-v1.schema.json",
+  "title": "run_ai_hosting_profile/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "id", "default_access_mode", "allowed_providers", "spam", "warnings"],
+  "properties": {
+    "schema": {"const": "run_ai_hosting_profile/v1"},
+    "id": {"type": "string", "minLength": 1},
+    "default_access_mode": {"const": "full"},
+    "allowed_providers": {"const": ["codex", "claude", "gemini"]},
+    "spam": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["host", "paths", "statuses", "max_messages", "max_url_bytes"],
+      "properties": {
+        "host": {"type": "string"},
+        "paths": {"const": ["/email/view", "/email/raw", "/email/source"]},
+        "statuses": {"const": ["active"]},
+        "max_messages": {"const": 10},
+        "max_url_bytes": {"const": 2048}
+      }
+    },
+    "warnings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["full_access_unsafe", "confirmation_required", "hard_readonly_enforced"],
+      "properties": {
+        "full_access_unsafe": {"type": "string", "minLength": 1},
+        "confirmation_required": {"type": "string", "minLength": 1},
+        "hard_readonly_enforced": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

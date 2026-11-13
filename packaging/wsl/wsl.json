@@ -1,0 +1,8 @@
+{
+  "schema": "run-ai-platform-profile/v1",
+  "id": "wsl",
+  "description": "Detect WSL without changing user configuration or sessions",
+  "detector": "/usr/lib/run-ai/detect-wsl",
+  "results": ["wsl1", "wsl2", "wsl", "not-wsl"],
+  "automatic_mutation": false
+}
